@@ -1,44 +1,61 @@
-// codeExecutionNode.js
+// codeExecutionNode.js - AI-Native Design
 import { useState } from "react";
-import { Handle, Position } from "reactflow";
+import { Position } from "reactflow";
 import {
   BaseNode,
-  labelClasses,
-  labelTextClasses,
-  inputClasses,
-  fieldContainerClasses,
+  NodeField,
+  NodeTextarea,
+  NodeInfo,
 } from "../components/BaseNode";
 
-export const CodeExecutionNode = ({ id, data }) => {
+export const CodeExecutionNode = ({ id, data, selected }) => {
   const [code, setCode] = useState(data?.code || "return input;");
+
+  const handles = [
+    {
+      type: "target",
+      position: Position.Left,
+      id: `${id}-input`,
+      handleType: "input",
+    },
+    {
+      type: "source",
+      position: Position.Right,
+      id: `${id}-result`,
+      handleType: "output",
+    },
+  ];
 
   return (
     <BaseNode
       id={id}
       title="Execute Code"
       icon="💻"
-      handles={[
-        { type: "target", position: Position.Left, id: `${id}-input` },
-        { type: "source", position: Position.Right, id: `${id}-result` },
-      ]}
-      style={{ minWidth: "300px" }}
+      handles={handles}
+      selected={selected}
     >
-      <div className={fieldContainerClasses}>
-        <div className="flex flex-col gap-2.5">
-          <label className={labelClasses}>
-            <span className={labelTextClasses}>JavaScript Code</span>
-            <textarea
-              className={`${inputClasses} min-h-[100px] font-mono bg-slate-50 resize-none`}
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              placeholder="// Write your logic here"
-            />
-          </label>
-          <div className="text-[10px] text-slate-400 italic">
-            Variable 'input' is available.
-          </div>
-        </div>
-      </div>
+      <NodeField label="JavaScript Code">
+        <NodeTextarea
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+          placeholder="// Write your logic here"
+          rows={5}
+        />
+      </NodeField>
+      <NodeInfo type="info">
+        Variable{" "}
+        <code
+          style={{
+            padding: "2px 4px",
+            background: "white",
+            borderRadius: "3px",
+            fontFamily: "monospace",
+          }}
+        >
+          input
+        </code>{" "}
+        is available
+      </NodeInfo>
     </BaseNode>
   );
 };

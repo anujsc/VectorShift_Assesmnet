@@ -1,25 +1,31 @@
-// transformNode.js
-// Part 1: Node Abstraction - Data transformation node
-
+// transformNode.js - AI-Native Design
 import { useState } from "react";
 import { Position } from "reactflow";
 import {
   BaseNode,
-  inputClasses,
-  labelClasses,
-  labelTextClasses,
-  fieldContainerClasses,
+  NodeField,
+  NodeSelect,
+  NodeInfo,
 } from "../components/BaseNode";
 
-export const TransformNode = ({ id, data }) => {
+export const TransformNode = ({ id, data, selected }) => {
   const [operation, setOperation] = useState(data?.operation || "uppercase");
 
   const handles = [
-    { type: "target", position: Position.Left, id: `${id}-input` },
-    { type: "source", position: Position.Right, id: `${id}-output` },
+    {
+      type: "target",
+      position: Position.Left,
+      id: `${id}-input`,
+      handleType: "input",
+    },
+    {
+      type: "source",
+      position: Position.Right,
+      id: `${id}-output`,
+      handleType: "output",
+    },
   ];
 
-  // Operation descriptions
   const operationInfo = {
     uppercase: "Convert text to UPPERCASE",
     lowercase: "Convert text to lowercase",
@@ -31,32 +37,29 @@ export const TransformNode = ({ id, data }) => {
   };
 
   return (
-    <BaseNode id={id} title="Transform" icon="⚙️" handles={handles}>
-      <div className={fieldContainerClasses}>
-        <div className="flex flex-col gap-2.5">
-          <label className={labelClasses}>
-            <span className={`${labelTextClasses} text-slate-600`}>
-              Operation
-            </span>
-            <select
-              value={operation}
-              onChange={(e) => setOperation(e.target.value)}
-              className={`${inputClasses} font-medium`}
-            >
-              <option value="uppercase">Uppercase</option>
-              <option value="lowercase">Lowercase</option>
-              <option value="trim">Trim</option>
-              <option value="reverse">Reverse</option>
-              <option value="length">Get Length</option>
-              <option value="json_parse">Parse JSON</option>
-              <option value="json_stringify">Stringify JSON</option>
-            </select>
-          </label>
-          <div className="text-[10px] text-slate-500 italic bg-slate-100 px-2 py-1.5 rounded border border-slate-200">
-            {operationInfo[operation]}
-          </div>
-        </div>
-      </div>
+    <BaseNode
+      id={id}
+      title="Transform"
+      icon="⚙️"
+      handles={handles}
+      selected={selected}
+    >
+      <NodeField label="Operation">
+        <NodeSelect
+          value={operation}
+          onChange={(e) => setOperation(e.target.value)}
+          options={[
+            { value: "uppercase", label: "Uppercase" },
+            { value: "lowercase", label: "Lowercase" },
+            { value: "trim", label: "Trim" },
+            { value: "reverse", label: "Reverse" },
+            { value: "length", label: "Get Length" },
+            { value: "json_parse", label: "Parse JSON" },
+            { value: "json_stringify", label: "Stringify JSON" },
+          ]}
+        />
+      </NodeField>
+      <NodeInfo type="info">{operationInfo[operation]}</NodeInfo>
     </BaseNode>
   );
 };

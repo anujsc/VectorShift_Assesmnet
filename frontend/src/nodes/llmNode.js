@@ -1,77 +1,96 @@
-// llmNode.js
-// Part 1: Node Abstraction - LLM node using BaseNode
-
+// llmNode.js - AI-Native Design
 import { Position } from "reactflow";
-import { BaseNode } from "../components/BaseNode";
+import { BaseNode, NodeInfo } from "../components/BaseNode";
 
-export const LLMNode = ({ id, data }) => {
+export const LLMNode = ({ id, data, selected }) => {
   const handles = [
     {
       type: "target",
       position: Position.Left,
       id: `${id}-system`,
+      handleType: "input",
       style: { top: "35%" },
     },
     {
       type: "target",
       position: Position.Left,
       id: `${id}-prompt`,
-      style: { top: "65%" },
+      handleType: "input",
+      style: { top: "55%" },
     },
-    { type: "source", position: Position.Right, id: `${id}-response` },
+    {
+      type: "source",
+      position: Position.Right,
+      id: `${id}-response`,
+      handleType: "output",
+      style: { top: "45%" },
+    },
   ];
 
   return (
     <BaseNode
       id={id}
       title="LLM"
-
+      icon="🤖"
       handles={handles}
+      selected={selected}
     >
-      <div style={{ fontSize: "12px" }}>
-        <p style={{ margin: "6px 0", fontWeight: "500", color: "#333" }}>
-          Large Language Model
-        </p>
+      <div style={{ marginBottom: "12px" }}>
         <div
           style={{
-            fontSize: "10px",
-            color: "#475569",
-            background: "#F1F5F9",
-            padding: "8px 10px",
-            borderRadius: "6px",
-            marginTop: "8px",
+            fontSize: "13px",
+            fontWeight: "500",
+            color: "#0F172A",
+            marginBottom: "8px",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-              marginBottom: "4px",
-            }}
-          >
-            <span style={{ color: "#3b82f6" }}>●</span>
+          Large Language Model
+        </div>
+        <div style={{ fontSize: "11px", color: "#64748B", lineHeight: "1.5" }}>
+          Processes system and user prompts to generate AI responses
+        </div>
+      </div>
+
+      <NodeInfo type="info">
+        <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div
+              style={{
+                width: "6px",
+                height: "6px",
+                borderRadius: "50%",
+                background: "#60A5FA",
+              }}
+            ></div>
             <span>System Prompt</span>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-            <span style={{ color: "#3b82f6" }}>●</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div
+              style={{
+                width: "6px",
+                height: "6px",
+                borderRadius: "50%",
+                background: "#60A5FA",
+              }}
+            ></div>
             <span>User Prompt</span>
           </div>
           <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-              marginTop: "6px",
-              paddingTop: "6px",
-              borderTop: "1px solid #E2E8F0",
-            }}
-          >
-            <span style={{ color: "#10b981" }}>●</span>
+            style={{ height: "1px", background: "#BAE6FD", margin: "4px 0" }}
+          ></div>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div
+              style={{
+                width: "6px",
+                height: "6px",
+                borderRadius: "50%",
+                background: "#34D399",
+              }}
+            ></div>
             <span>Response Output</span>
           </div>
         </div>
-      </div>
+      </NodeInfo>
     </BaseNode>
   );
 };

@@ -1,48 +1,54 @@
-// fileSaveNode.js
-import { Handle, Position } from "reactflow";
+// fileSaveNode.js - AI-Native Design
+import { useState } from "react";
+import { Position } from "reactflow";
 import {
   BaseNode,
-  labelClasses,
-  labelTextClasses,
-  inputClasses,
-  fieldContainerClasses,
+  NodeField,
+  NodeInput,
+  NodeSelect,
+  NodeInfo,
 } from "../components/BaseNode";
 
-export const FileSaveNode = ({ id, data }) => {
+export const FileSaveNode = ({ id, data, selected }) => {
+  const [fileName, setFileName] = useState(data?.fileName || "output.json");
+  const [format, setFormat] = useState(data?.format || "json");
+
+  const handles = [
+    {
+      type: "target",
+      position: Position.Left,
+      id: `${id}-data`,
+      handleType: "input",
+    },
+  ];
+
   return (
     <BaseNode
       id={id}
       title="File Save"
       icon="💾"
-      handles={[{ type: "target", position: Position.Left, id: `${id}-data` }]}
+      handles={handles}
+      selected={selected}
     >
-      <div className={fieldContainerClasses}>
-        <div className="flex flex-col gap-2.5">
-          <div className="text-[11px] text-slate-500 mb-1">
-            Saves incoming data to a file.
-          </div>
-          <label className={labelClasses}>
-            <span className={labelTextClasses}>File Name</span>
-            <input
-              type="text"
-              className={inputClasses}
-              defaultValue={data?.fileName || "output.json"}
-              placeholder="e.g. data.json"
-            />
-          </label>
-          <label className={labelClasses}>
-            <span className={labelTextClasses}>Format</span>
-            <select
-              className={inputClasses}
-              defaultValue={data?.format || "json"}
-            >
-              <option value="json">JSON</option>
-              <option value="csv">CSV</option>
-              <option value="txt">Text</option>
-            </select>
-          </label>
-        </div>
-      </div>
+      <NodeInfo type="info">Saves incoming data to a file</NodeInfo>
+      <NodeField label="File Name">
+        <NodeInput
+          value={fileName}
+          onChange={(e) => setFileName(e.target.value)}
+          placeholder="output.json"
+        />
+      </NodeField>
+      <NodeField label="Format">
+        <NodeSelect
+          value={format}
+          onChange={(e) => setFormat(e.target.value)}
+          options={[
+            { value: "json", label: "JSON" },
+            { value: "csv", label: "CSV" },
+            { value: "txt", label: "Text" },
+          ]}
+        />
+      </NodeField>
     </BaseNode>
   );
 };

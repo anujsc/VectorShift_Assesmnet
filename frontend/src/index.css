@@ -1,3 +1,12 @@
+/* Global Styles - VectorShift Pipeline Builder */
+/* AI-Native Design System */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Node Styles */
+@import './styles/nodes.css';
 
 * {
   box-sizing: border-box;
@@ -14,42 +23,38 @@ body,
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #0a0f1a;
-  color: #f1f5f9;
+  background: #F8FAFC;
+  color: #1E293B;
   line-height: 1.5;
 }
 
 code {
-  font-family: 'Fira Code', source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
 }
 
-/* Custom scrollbar styling */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(30, 41, 59, 0.5);
-  border-radius: 4px;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(100, 116, 139, 0.5);
-  border-radius: 4px;
+  background: #CBD5E1;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(100, 116, 139, 0.8);
+  background: #94A3B8;
 }
 
-/* React Flow custom styles */
+/* React Flow Nodes */
 .react-flow__node {
   cursor: grab;
 }
@@ -62,14 +67,15 @@ code {
   outline: none;
 }
 
-.react-flow__node.selected .base-node-card {
-  box-shadow: 0 0 0 2px #3B82F6, 0 10px 25px rgba(0, 0, 0, 0.15) !important;
-  border-color: #3B82F6 !important;
+.react-flow__node.selected > div {
+  box-shadow: 0 0 0 2px #6366F1, 0 8px 24px rgba(99, 102, 241, 0.25) !important;
+  border-color: #6366F1 !important;
 }
 
-/* Edge animations */
+/* Edge styling */
 .react-flow__edge-path {
   stroke-width: 2;
+  stroke: #6366F1;
 }
 
 .react-flow__edge.animated path {
@@ -78,37 +84,32 @@ code {
 }
 
 @keyframes flowAnimation {
-  from {
-    stroke-dashoffset: 10;
-  }
-
-  to {
-    stroke-dashoffset: 0;
-  }
+  from { stroke-dashoffset: 10; }
+  to { stroke-dashoffset: 0; }
 }
 
-/* Connection line styling */
+/* Connection line */
 .react-flow__connection-line {
-  stroke: #8b5cf6;
+  stroke: #6366F1;
   stroke-width: 2;
 }
 
-/* Controls styling */
+/* Controls */
 .react-flow__controls {
-  background: #FFFFFF;
+  background: white;
   border: 1px solid #E2E8F0;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   overflow: hidden;
 }
 
 .react-flow__controls-button {
   background: transparent;
   border: none;
-  border-bottom: 1px solid #E2E8F0;
+  border-bottom: 1px solid #F1F5F9;
   color: #64748B;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -117,7 +118,7 @@ code {
 }
 
 .react-flow__controls-button:hover {
-  background: #F1F5F9;
+  background: #F8FAFC;
   color: #1E293B;
 }
 
@@ -127,15 +128,19 @@ code {
 
 .react-flow__controls-button svg {
   fill: currentColor;
+  width: 16px;
+  height: 16px;
 }
 
-/* MiniMap styling */
+/* MiniMap */
 .react-flow__minimap {
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* Base node card effects */
+/* Base node card */
 .base-node-card {
   user-select: none;
 }
@@ -144,7 +149,7 @@ code {
   cursor: grabbing !important;
 }
 
-/* Input and select styling */
+/* Form elements */
 input,
 select,
 textarea {
@@ -155,58 +160,41 @@ textarea {
 input:focus,
 select:focus,
 textarea:focus {
-  /* Blue 500 Focus Ring */
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
-  border-color: #3B82F6 !important;
-  background: #FFFFFF;
+  border-color: #6366F1 !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
 }
 
-/* Select dropdown styling */
 select option {
-  background: #FFFFFF;
+  background: white;
   color: #1E293B;
   padding: 8px;
 }
 
-/* Smooth transitions for all interactive elements */
 button,
 input,
 select,
 textarea {
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
 }
 
-/* Button reset */
 button {
   font-family: inherit;
 }
 
-/* Spin animation for loading states */
+/* Animations */
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-/* Pulse animation for handles */
-@keyframes pulse {
-
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.5;
-  }
-}
-
-/* Selection styling */
+/* Selection */
 ::selection {
-  background: rgba(99, 102, 241, 0.2);
+  background: rgba(99, 102, 241, 0.15);
   color: #1E293B;
+}
+
+/* Handle hover effect */
+.react-flow__handle:hover {
+  transform: scale(1.3);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
 }

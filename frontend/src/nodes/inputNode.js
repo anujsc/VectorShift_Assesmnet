@@ -1,55 +1,54 @@
-// inputNode.js
-// Part 1: Node Abstraction - Input node using BaseNode
-
+// inputNode.js - AI-Native Design
 import { useState } from "react";
 import { Position } from "reactflow";
 import {
   BaseNode,
-  inputStyles,
-  labelStyles,
-  labelTextStyles,
+  NodeField,
+  NodeInput,
+  NodeSelect,
 } from "../components/BaseNode";
 
-export const InputNode = ({ id, data }) => {
+export const InputNode = ({ id, data, selected }) => {
   const [currName, setCurrName] = useState(
     data?.inputName || id.replace("customInput-", "input_")
   );
-  const [inputType, setInputType] = useState(data.inputType || "Text");
+  const [inputType, setInputType] = useState(data?.inputType || "Text");
 
   const handles = [
-    { type: "source", position: Position.Right, id: `${id}-value` },
+    {
+      type: "source",
+      position: Position.Right,
+      id: `${id}-value`,
+      handleType: "output",
+    },
   ];
 
   return (
     <BaseNode
       id={id}
       title="Input"
-
+      icon="📥"
       handles={handles}
+      selected={selected}
     >
-      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-        <label style={labelStyles}>
-          <span style={labelTextStyles}>Name:</span>
-          <input
-            type="text"
-            value={currName}
-            onChange={(e) => setCurrName(e.target.value)}
-            style={inputStyles}
-            placeholder="Enter input name"
-          />
-        </label>
-        <label style={labelStyles}>
-          <span style={labelTextStyles}>Type:</span>
-          <select
-            value={inputType}
-            onChange={(e) => setInputType(e.target.value)}
-            style={inputStyles}
-          >
-            <option value="Text">Text</option>
-            <option value="File">File</option>
-          </select>
-        </label>
-      </div>
+      <NodeField label="Name">
+        <NodeInput
+          value={currName}
+          onChange={(e) => setCurrName(e.target.value)}
+          placeholder="input_1"
+        />
+      </NodeField>
+
+      <NodeField label="Type">
+        <NodeSelect
+          value={inputType}
+          onChange={(e) => setInputType(e.target.value)}
+          options={[
+            { value: "Text", label: "Text" },
+            { value: "File", label: "File" },
+          ]}
+        />
+      </NodeField>
     </BaseNode>
   );
 };

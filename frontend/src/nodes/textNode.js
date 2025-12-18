@@ -1,149 +1,123 @@
-// textNode.js
-// Part 3: Text Node Logic - Auto-resize and variable extraction
-
+// textNode.js - AI-Native Design with Enhanced Features
 import { useState, useEffect, useRef } from "react";
 import { Position } from "reactflow";
 import {
   BaseNode,
-  inputStyles,
-  labelStyles,
-  labelTextStyles,
+  NodeField,
+  NodeTextarea,
+  NodeTag,
+  NodeInfo,
 } from "../components/BaseNode";
 
-export const TextNode = ({ id, data }) => {
+export const TextNode = ({ id, data, selected }) => {
   const [currText, setCurrText] = useState(data?.text || "{{input}}");
-  const [dimensions, setDimensions] = useState({ width: 280, height: 140 });
   const [variables, setVariables] = useState([]);
   const textareaRef = useRef(null);
 
-  // Extract variables from text using regex - validates JavaScript variable names
+  // Extract variables from text
   const extractVariables = (text) => {
-    // Pattern: {{ variableName }} - must be valid JS identifier
     const regex = /\{\{\s*([a-zA-Z_$][a-zA-Z0-9_$]*)\s*\}\}/g;
     const vars = [];
     let match;
     while ((match = regex.exec(text)) !== null) {
       vars.push(match[1]);
     }
-    return [...new Set(vars)]; // Remove duplicates
+    return [...new Set(vars)];
   };
 
-  // Auto-resize based on text content
-  const handleTextChange = (e) => {
-    const text = e.target.value;
-    setCurrText(text);
-
-    // Calculate dimensions based on content
-    const lines = text.split("\n").length;
-    const longestLine = Math.max(
-      ...text.split("\n").map((line) => line.length),
-      10 // minimum line length
-    );
-
-    // Dynamic sizing with smooth constraints
-    const newHeight = Math.max(140, Math.min(lines * 22 + 100, 350));
-    const newWidth = Math.max(280, Math.min(longestLine * 7.5 + 60, 450));
-
-    setDimensions({ width: newWidth, height: newHeight });
-  };
-
-  // Update variables when text changes
   useEffect(() => {
-    const vars = extractVariables(currText);
-    setVariables(vars);
+    setVariables(extractVariables(currText));
   }, [currText]);
 
-  // Calculate handle positions to avoid overlap
-  const getHandlePosition = (index, total) => {
-    const startOffset = 50; // Start from middle area
-    const spacing = Math.min(30, (dimensions.height - 80) / Math.max(total, 1));
-    return startOffset + index * spacing;
-  };
-
-  // Create dynamic handles for variables
+  // Dynamic handles based on variables
   const handles = [
     ...variables.map((varName, index) => ({
       type: "target",
       position: Position.Left,
       id: `${id}-${varName}`,
-      style: { top: `${getHandlePosition(index, variables.length)}px` },
+      handleType: "variable",
+      style: { top: `${35 + index * 18}%` },
     })),
-    { type: "source", position: Position.Right, id: `${id}-output` },
+    {
+      type: "source",
+      position: Position.Right,
+      id: `${id}-output`,
+      handleType: "output",
+    },
   ];
 
   return (
     <BaseNode
       id={id}
       title="Text"
-
+      icon="📝"
       handles={handles}
-      style={{
-        width: `${dimensions.width}px`,
-        minHeight: `${dimensions.height}px`,
-        transition: "width 0.2s ease, min-height 0.2s ease",
-      }}
+      selected={selected}
     >
-      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-        <label style={labelStyles}>
-          <span style={labelTextStyles}>Text Content:</span>
-          <textarea
-            ref={textareaRef}
-            value={currText}
-            onChange={handleTextChange}
-            style={{
-              ...inputStyles,
-              minHeight: "80px",
-              resize: "none",
-              fontFamily: "'Fira Code', 'Monaco', 'Consolas', monospace",
-              lineHeight: "1.5",
-              whiteSpace: "pre-wrap",
-              wordBreak: "break-word",
-              background: "#F8FAFC", // Slightly darker input bg
-            }}
-            placeholder="Enter text with {{variables}}"
-          />
-        </label>
+      <NodeField label="Text Content">
+        <NodeTextarea
+          ref={textareaRef}
+          value={currText}
+          onChange={(e) => setCurrText(e.target.value)}
+          placeholder="Enter text with {{variables}}"
+          rows={4}
+        />
+      </NodeField>
 
-        {/* Variable Display */}
-        {variables.length > 0 && (
+      {variables.length > 0 && (
+        <div style={{ marginTop: "8px", marginBottom: "8px" }}>
           <div
             style={{
               fontSize: "11px",
-              padding: "8px 10px",
-              background: "#F1F5F9",
-              borderRadius: "6px",
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "6px",
-              alignItems: "center",
-              border: "1px solid #E2E8F0",
+              fontWeight: "600",
+              color: "#64748B",
+              marginBottom: "6px",
+              textTransform: "uppercase",
+              letterSpacing: "0.05em",
             }}
           >
-            <span style={{ opacity: 0.7, marginRight: "4px", color: "#475569" }}>Variables:</span>
+            Variables
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
             {variables.map((v, i) => (
-              <span
-                key={i}
-                style={{
-                  background: "#E2E8F0",
-                  color: "#1E293B",
-                  padding: "2px 8px",
-                  borderRadius: "4px",
-                  fontFamily: "monospace",
-                  fontSize: "10px",
-                  border: "1px solid #CBD5E1"
-                }}
-              >
+              <NodeTag key={i} color="violet">
+                <svg
+                  width="10"
+                  height="10"
+                  viewBox="0 0 10 10"
+                  fill="currentColor"
+                >
+                  <circle cx="5" cy="5" r="2" />
+                </svg>
                 {v}
-              </span>
+              </NodeTag>
             ))}
           </div>
-        )}
-
-        {/* Help text */}
-        <div style={{ fontSize: "10px", color: "#94A3B8", fontStyle: "italic", marginTop: "4px" }}>
-          Use {"{{variableName}}"} to create input handles
         </div>
-      </div>
+      )}
+
+      <NodeInfo type="info">
+        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+            <path d="M6 0a6 6 0 100 12A6 6 0 006 0zm0 10a1 1 0 110-2 1 1 0 010 2zm1-3H5V3h2v4z" />
+          </svg>
+          <span>
+            Use{" "}
+            <code
+              style={{
+                padding: "2px 4px",
+                background: "white",
+                borderRadius: "3px",
+                fontFamily: "monospace",
+                fontSize: "10px",
+              }}
+            >
+              {"{{variableName}}"}
+            </code>{" "}
+            to create input handles
+          </span>
+        </div>
+      </NodeInfo>
     </BaseNode>
   );
 };
