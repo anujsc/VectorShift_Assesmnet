@@ -45,7 +45,11 @@ export const BaseNode = memo(
             className={`node-handle node-handle-${
               handle.handleType || "default"
             }`}
-            style={handle.style}
+            style={{
+              ...handle.style,
+              pointerEvents: "all",
+            }}
+            isConnectable={true}
           />
         ))}
       </div>

@@ -57,6 +57,7 @@ code {
 /* React Flow Nodes */
 .react-flow__node {
   cursor: grab;
+  pointer-events: all;
 }
 
 .react-flow__node:active {
@@ -70,6 +71,24 @@ code {
 .react-flow__node.selected > div {
   box-shadow: 0 0 0 2px #6366F1, 0 8px 24px rgba(99, 102, 241, 0.25) !important;
   border-color: #6366F1 !important;
+}
+
+/* React Flow Handles - Fix Selection Issues */
+.react-flow__handle {
+  width: 14px !important;
+  height: 14px !important;
+  pointer-events: all !important;
+  cursor: crosshair !important;
+  z-index: 10 !important;
+}
+
+.react-flow__handle:hover {
+  z-index: 20 !important;
+}
+
+.react-flow__handle-connecting {
+  pointer-events: all !important;
+  z-index: 30 !important;
 }
 
 /* Edge styling */

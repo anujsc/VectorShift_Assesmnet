@@ -262,40 +262,61 @@
   color: #065F46;
 }
 
-/* Connection Handles */
+/* Connection Handles - Enhanced for Better UX */
 .node-handle {
-  width: 10px;
-  height: 10px;
-  border: 2px solid var(--color-surface);
-  border-radius: 50%;
-  transition: all 0.15s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 14px !important;
+  height: 14px !important;
+  border: 3px solid var(--color-surface) !important;
+  border-radius: 50% !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
+  cursor: crosshair !important;
+  z-index: 10 !important;
 }
 
 .node-handle:hover {
-  transform: scale(1.3);
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+  transform: scale(1.4) !important;
+  box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.2), 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+  z-index: 20 !important;
+}
+
+.node-handle.connecting {
+  transform: scale(1.5) !important;
+  box-shadow: 0 0 0 8px rgba(59, 130, 246, 0.3) !important;
 }
 
 .node-handle-default {
-  background: var(--handle-input);
+  background: var(--handle-input) !important;
 }
 
 .node-handle-input {
-  background: var(--handle-input);
+  background: var(--handle-input) !important;
 }
 
 .node-handle-output {
-  background: var(--handle-output);
+  background: var(--handle-output) !important;
 }
 
 .node-handle-variable {
-  background: var(--handle-variable);
+  background: var(--handle-variable) !important;
+}
+
+/* Handle Hit Area - Larger clickable area */
+.node-handle::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  border-radius: 50%;
+  cursor: crosshair;
 }
 
 /* React Flow Overrides */
 .react-flow__node {
   cursor: grab;
+  pointer-events: all;
 }
 
 .react-flow__node:active {
@@ -307,18 +328,61 @@
   box-shadow: var(--shadow-glow), var(--shadow-md);
 }
 
+/* Handles - Prevent pointer event conflicts */
+.react-flow__handle {
+  pointer-events: all !important;
+  cursor: crosshair !important;
+}
+
+.react-flow__handle-connecting {
+  pointer-events: all !important;
+}
+
+/* Edge Styling */
 .react-flow__edge-path {
   stroke: var(--color-accent-blue);
-  stroke-width: 2;
+  stroke-width: 2.5;
+  transition: stroke-width 0.2s ease;
+}
+
+.react-flow__edge:hover .react-flow__edge-path {
+  stroke-width: 3;
 }
 
 .react-flow__edge.selected .react-flow__edge-path {
   stroke: var(--color-accent-violet);
+  stroke-width: 3;
 }
 
+.react-flow__edge.animated .react-flow__edge-path {
+  stroke-dasharray: 5;
+  animation: dashdraw 0.5s linear infinite;
+}
+
+@keyframes dashdraw {
+  from {
+    stroke-dashoffset: 10;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Connection Line */
 .react-flow__connection-line {
   stroke: var(--color-accent-blue);
-  stroke-width: 2;
+  stroke-width: 2.5;
+  stroke-dasharray: 5;
+  animation: dashdraw 0.5s linear infinite;
+}
+
+/* Prevent selection glitches */
+.react-flow__renderer {
+  pointer-events: all;
+}
+
+.react-flow__selection {
+  pointer-events: none;
 }
 
 /* Responsive Adjustments */
