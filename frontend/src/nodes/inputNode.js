@@ -7,12 +7,25 @@ import {
   NodeInput,
   NodeSelect,
 } from "../components/BaseNode";
+import { sanitizeNodeName } from "../utils/sanitize";
+import { validateNodeName } from "../utils/validation";
 
 export const InputNode = ({ id, data, selected }) => {
   const [currName, setCurrName] = useState(
     data?.inputName || id.replace("customInput-", "input_")
   );
   const [inputType, setInputType] = useState(data?.inputType || "Text");
+  const [nameError, setNameError] = useState("");
+
+  const handleNameChange = (e) => {
+    const rawName = e.target.value;
+    const sanitized = sanitizeNodeName(rawName);
+    setCurrName(sanitized);
+
+    // Validate on change
+    const validation = validateNodeName(sanitized);
+    setNameError(validation.valid ? "" : validation.error);
+  };
 
   const handles = [
     {
@@ -34,9 +47,21 @@ export const InputNode = ({ id, data, selected }) => {
       <NodeField label="Name">
         <NodeInput
           value={currName}
-          onChange={(e) => setCurrName(e.target.value)}
+          onChange={handleNameChange}
           placeholder="input_1"
+          className={nameError ? "node-input-error" : ""}
         />
+        {nameError && (
+          <div
+            style={{
+              fontSize: "11px",
+              color: "#EF4444",
+              marginTop: "4px",
+            }}
+          >
+            {nameError}
+          </div>
+        )}
       </NodeField>
 
       <NodeField label="Type">

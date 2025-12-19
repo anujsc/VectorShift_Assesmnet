@@ -35,17 +35,7 @@ export const PipelineToolbar = () => {
         >
           Pipeline Builder
         </h2>
-        <span
-          style={{
-            color: "#64748B",
-            fontSize: "12px",
-            background: "#F1F5F9",
-            padding: "4px 10px",
-            borderRadius: "4px",
-          }}
-        >
-          Drag & Drop
-        </span>
+        
       </div>
 
       {/* Node Categories */}

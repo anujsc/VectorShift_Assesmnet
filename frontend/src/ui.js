@@ -18,6 +18,7 @@ import { LoopNode } from "./nodes/loopNode";
 import { FileSaveNode } from "./nodes/fileSaveNode";
 import { DataFilterNode } from "./nodes/dataFilterNode";
 import { CodeExecutionNode } from "./nodes/codeExecutionNode";
+import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts";
 
 import "reactflow/dist/style.css";
 
@@ -62,6 +63,9 @@ export const PipelineUI = () => {
     onEdgesChange,
     onConnect,
   } = useStore(selector, shallow);
+
+  // Enable keyboard shortcuts
+  useKeyboardShortcuts(reactFlowInstance);
 
   const getInitNodeData = (nodeID, type) => {
     let nodeData = { id: nodeID, nodeType: `${type}` };
@@ -190,7 +194,9 @@ export const PipelineUI = () => {
             pointerEvents: "none",
           }}
         >
-          <div style={{ fontSize: "18px", fontWeight: "500", marginBottom: "8px" }}>
+          <div
+            style={{ fontSize: "18px", fontWeight: "500", marginBottom: "8px" }}
+          >
             Start Building Your Pipeline
           </div>
           <div style={{ fontSize: "14px", opacity: 0.7 }}>

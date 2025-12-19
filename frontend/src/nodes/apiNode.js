@@ -7,10 +7,17 @@ import {
   NodeInput,
   NodeSelect,
 } from "../components/BaseNode";
+import { sanitizeInput } from "../utils/sanitize";
 
 export const APINode = ({ id, data, selected }) => {
   const [method, setMethod] = useState(data?.method || "GET");
   const [url, setUrl] = useState(data?.url || "https://api.example.com");
+
+  const handleUrlChange = (e) => {
+    // Sanitize URL input to prevent XSS
+    const sanitized = sanitizeInput(e.target.value);
+    setUrl(sanitized);
+  };
 
   const handles = [
     {
@@ -58,7 +65,7 @@ export const APINode = ({ id, data, selected }) => {
       <NodeField label="URL">
         <NodeInput
           value={url}
-          onChange={(e) => setUrl(e.target.value)}
+          onChange={handleUrlChange}
           placeholder="https://api.example.com"
         />
       </NodeField>

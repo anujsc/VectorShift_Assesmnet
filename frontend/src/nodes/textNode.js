@@ -8,6 +8,7 @@ import {
   NodeTag,
   NodeInfo,
 } from "../components/BaseNode";
+import { sanitizeInput, isValidVariableName } from "../utils/sanitize";
 
 export const TextNode = ({ id, data, selected }) => {
   const [currText, setCurrText] = useState(data?.text || "{{input}}");
@@ -20,14 +21,34 @@ export const TextNode = ({ id, data, selected }) => {
     const vars = [];
     let match;
     while ((match = regex.exec(text)) !== null) {
-      vars.push(match[1]);
+      // Validate variable name for security
+      if (isValidVariableName(match[1])) {
+        vars.push(match[1]);
+      }
     }
     return [...new Set(vars)];
   };
 
+  // Auto-resize textarea
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height =
+        textareaRef.current.scrollHeight + "px";
+    }
+  }, [currText]);
+
   useEffect(() => {
     setVariables(extractVariables(currText));
   }, [currText]);
+
+  // Handle text change with sanitization
+  const handleTextChange = (e) => {
+    const rawText = e.target.value;
+    // Don't sanitize during typing, only on blur or submit
+    // This allows users to type {{ }} without issues
+    setCurrText(rawText);
+  };
 
   // Dynamic handles based on variables
   const handles = [
@@ -58,9 +79,10 @@ export const TextNode = ({ id, data, selected }) => {
         <NodeTextarea
           ref={textareaRef}
           value={currText}
-          onChange={(e) => setCurrText(e.target.value)}
+          onChange={handleTextChange}
           placeholder="Enter text with {{variables}}"
           rows={4}
+          style={{ minHeight: "80px", maxHeight: "300px", overflow: "auto" }}
         />
       </NodeField>
 

@@ -7,12 +7,18 @@ import {
   NodeInput,
   NodeSelect,
 } from "../components/BaseNode";
+import { sanitizeNodeName } from "../utils/sanitize";
 
 export const OutputNode = ({ id, data, selected }) => {
   const [currName, setCurrName] = useState(
     data?.outputName || id.replace("customOutput-", "output_")
   );
   const [outputType, setOutputType] = useState(data?.outputType || "Text");
+
+  const handleNameChange = (e) => {
+    const sanitized = sanitizeNodeName(e.target.value);
+    setCurrName(sanitized);
+  };
 
   const handles = [
     {
@@ -34,7 +40,7 @@ export const OutputNode = ({ id, data, selected }) => {
       <NodeField label="Name">
         <NodeInput
           value={currName}
-          onChange={(e) => setCurrName(e.target.value)}
+          onChange={handleNameChange}
           placeholder="output_1"
         />
       </NodeField>
